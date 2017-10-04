@@ -15,13 +15,22 @@ class	TestGenomicRangesMethods(unittest.TestCase):
 		self.assertEqual(test.ranges["1"][0].start, 10)
 		self.assertEqual(test.ranges["1"][0].end, 30)
 
-	def test_addChrpPefix(self):
+	def test_addChrPefix(self):
 		test = GenomicRanges()
 		test.addRange("chr1", 10, 30)
 		self.assertEqual(test.ranges["1"][0].start, 10)
 		self.assertEqual(test.ranges["1"][0].end, 30)
 
-	def test_addMultiple(self):
+	def test_addMultipleChromosomes(self):
+		test = GenomicRanges()
+		test.addRange("1", 10, 30)
+		test.addRange("2", 5, 7)
+		self.assertEqual(test.ranges["2"][0].start,5)
+		self.assertEqual(test.ranges["2"][0].end, 7)
+		self.assertEqual(test.ranges["1"][0].start,10)
+		self.assertEqual(test.ranges["1"][0].end, 30)
+
+	def test_addMultipleRanges(self):
 		test = GenomicRanges()
 		test.addRange("1", 10, 30)
 		test.addRange("1", 5, 7)
