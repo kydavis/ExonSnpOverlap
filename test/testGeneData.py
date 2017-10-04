@@ -1,5 +1,5 @@
 import unittest
-from lib.GeneData import GenomicRanges, Range
+from lib.GeneData import GenomicRanges
 
 class	TestGenomicRangesMethods(unittest.TestCase):
 

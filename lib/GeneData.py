@@ -12,7 +12,7 @@ class Range:
 	"""
 		Parameters:
 			Start: start of the genomic range
-			End: end of the genomic range
+			End: end of the genomic range (inclusive)
 	"""
 	def __init__(self, start, end):
 		self.start = start
