@@ -1,5 +1,3 @@
-from lib.Range import Range
-
 """
 	Purpose:
 		Hold and organize genome data extracted from GFF or BED files
@@ -9,10 +7,10 @@ from lib.Range import Range
 """
 
 
-class GenomicRanges:
+class GenomicIntervals:
 
 	def __init__(self):
-		self.ranges = {}
+		self.intervals = {}
 	
 	"""
 		Purpose:
@@ -38,13 +36,12 @@ class GenomicRanges:
 		return (start)
 
 
-	def addRange(self, chromosome, start, end):
+	def addInterval(self, chromosome, start, end):
 		if (len(chromosome) > 3 and chromosome[:3] == 'chr'):
 			chromosome = chromosome[3]
-		rng = Range(start, end)
 		rng = tuple([min(start, end), max(start, end)])
-		if (chromosome in self.ranges):
-			insert = self._findInsertion(self.ranges[chromosome], rng)
-			self.ranges[chromosome].insert(insert, rng)
+		if (chromosome in self.intervals):
+			insert = self._findInsertion(self.intervals[chromosome], rng)
+			self.intervals[chromosome].insert(insert, rng)
 		else:
-			self.ranges[chromosome] = [rng]
+			self.intervals[chromosome] = [rng]
