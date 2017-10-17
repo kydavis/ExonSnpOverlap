@@ -24,14 +24,14 @@ class GenomicRanges:
 		end = len(chromosome)
 		while (start < end):
 			mid = (start + end) / 2
-			if (rng.start < chromosome[mid].start):
+			if (rng[0] < chromosome[mid][0]):
 				end = mid
-			elif (rng.start > chromosome[mid].start):
+			elif (rng[0] > chromosome[mid][0]):
 				start = mid + 1
 			else: 
-				if (rng.end < chromosome[mid].end):
+				if (rng[1] < chromosome[mid][1]):
 					end = mid
-				elif(rng.end > chromosome[mid].end):
+				elif(rng[1] > chromosome[mid][1]):
 					start = mid + 1
 				else:
 					return (start)
@@ -42,6 +42,7 @@ class GenomicRanges:
 		if (len(chromosome) > 3 and chromosome[:3] == 'chr'):
 			chromosome = chromosome[3]
 		rng = Range(start, end)
+		rng = tuple([min(start, end), max(start, end)])
 		if (chromosome in self.ranges):
 			insert = self._findInsertion(self.ranges[chromosome], rng)
 			self.ranges[chromosome].insert(insert, rng)
