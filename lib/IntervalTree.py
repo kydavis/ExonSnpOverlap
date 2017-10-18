@@ -27,10 +27,9 @@ class IntervalTree:
 
 	"""
 		Init parameters:
-			Intervals: List of interval tuples for the construction of the tree.
+			Intervals: List of interval tuples SORTED BY FIRST VALUE IN THE TUPLE for the construction of the tree.
 	"""
 	def __init__(self, intervals):
-		intervals.sort(key=lambda x: x[0])
 		self.mid = intervals[(len(intervals) - 1) / 2][0]
 		self.left = None
 		self.right = None
