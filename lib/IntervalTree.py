@@ -30,6 +30,40 @@ class IntervalTree:
 			Intervals: List of interval tuples for the construction of the tree.
 	"""
 	def __init__(self, intervals):
+		intervals.sort(key=lambda x: x[0])
+		self.mid = intervals[(len(intervals) - 1) / 2][0]
+		self.left = None
+		self.right = None
+		leftIntervals = []
+		midIntervals = []
+		rightIntervals = []
+		for interval in intervals:
+			if (interval[1] < self.mid):
+				leftIntervals.append(interval)
+			elif (interval[0] > self.mid):
+				rightIntervals.append(interval)
+			else:
+				midIntervals.append(interval)
+		self.overlapStart = list(midIntervals)
+		midIntervals.sort(key=lambda x: x[1], reverse=True)
+		self.overlapEnd = midIntervals
+		if (len(leftIntervals) > 0):
+			self.left = IntervalTree(leftIntervals)
+		if (len(rightIntervals) > 0):
+			self.right = IntervalTree(rightIntervals)
+
+	def __repr__(self):
+		return("""
+Mid:{}
+Sorted Start:{}
+Sorted End:{}
+
+Left:
+	{}
+
+Right:
+	{}
+""".format(self.mid, self.overlapStart, self.overlapEnd, self.left, self.right))
 
 
 	"""
@@ -44,3 +78,4 @@ class IntervalTree:
 			List of intervals in tree that overlap
 	"""
 	def findOverlap(start, end):
+		return (True)
