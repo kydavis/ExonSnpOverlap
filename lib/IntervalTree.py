@@ -1,30 +1,6 @@
 
 class IntervalTree:
 
-	class	ITNode:
-
-		"""
-			Class attributes:
-				mid: Center of the largest range
-				left: Subtree containing intervals completely left of center
-				right: Subtree containing intervals completely right of center
-				startOverlap: List of overlapping ranges sorted by start point
-				endOverlap: List of overlapping ranges sorted by end point
-		"""
-
-		"""
-			Init parameters:
-		"""
-
-		def __init__(self, mid):
-			self.mid = mid
-			self.left = None
-			self.right = None
-			self.overlap = None
-			self.overlapStart = None
-			self.overlapEnd = None
-			
-
 	"""
 		Init parameters:
 			Intervals: List of interval tuples SORTED BY FIRST VALUE IN THE TUPLE for the construction of the tree.
@@ -75,23 +51,61 @@ Right:
 		Return:
 			List of intervals in tree that overlap
 	"""
-	def querey(interval):
+	def querey(self, interval):
 		ret = set()
 		if (len(interval) == 1 or interval[0] == interval[1]):
 			self._quereyPoint(interval[0], ret)
-		elif (len(interval) == 2):
+		elif (len(interval) == 2 and interval[0] < interval[1]):
 			self._quereyRange(interval, ret)
 		else:
-			raise ValueError("Interval Tree Querey takes a list of a maximum of two values ie. ([1] or [1, 2])")
+			raise ValueError("Interval Tree Querey takes a list of a maximum of two" +
+				"values ie. ([1] or [1, 2]) with the first value being less than or" +
+				"equal to the second value")
 		return (ret)
 
-	def _quereyPoint(point, ret):
-		left = self.left
-		right = self.right
-		while (left and right)
-		return (ret)
 
-	def _quereyRange(interval, ret):
-		left = self._quereyPoint(interval[0], ret)
-		right = self._quereyPoint(interval[1], ret)
-		return (ret)
+	"""
+		Functions used for searching for a single point within
+			the Interval Tree
+	"""
+	def _addIntervalsPoint(self, point, intervals, ret):
+		for interval in intervals:
+			if (point >= interval[0] and point <= interval[1]):
+				ret.add(interval)
+			else:
+				return
+
+	def _quereyPoint(self, point, ret):
+		if (point < self.mid):
+			self._addIntervalsPoint(point, self.overlapStart, ret)
+			if (self.left):
+				self.left._quereyPoint(point, ret)
+		else:
+			self._addIntervalsPoint(point, self.overlapEnd, ret)
+			if (self.right):
+				self.right._quereyPoint(point, ret)
+
+	"""
+		Functions used for searching for an interval overlap
+			within the Interval Tree
+	"""
+	
+	def _addIntervals(self, value, intervals, ret):
+		for interval in intervals:
+			if (max(value[0], interval[0]) <= min(value[1], interval[1])):
+				ret.add(interval)
+			else:
+				return
+
+	def _quereyRange(self, value, ret):
+		if (value[0] <= self.mid):
+			self._addIntervals(value, self.overlapStart, ret)
+			if (self.left):
+				self.left._quereyRange(value, ret)
+			if (value[1] > self.mid and self.right):
+				self.right._quereyRange(value, ret)
+		else:
+			self._addIntervals(value, self.overlapEnd, ret)
+			if (self.right):
+				self.right._quereyRange(value, ret)
+		return
