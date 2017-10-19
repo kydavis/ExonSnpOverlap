@@ -7,7 +7,7 @@ def parseGFF(file_name):
 	with open(file_name, "rb") as gff:
 		for entry in gff:
 			split = entry.split()
-			ret.addInterval(split[0], split[3], split[4])
+			ret.addInterval(split[0], int(split[3]), int(split[4]))
 	return (ret)
 
 def parseBED(file_name):
@@ -15,7 +15,7 @@ def parseBED(file_name):
 	with open(file_name, "rb") as bed:
 		for entry in bed:
 			split = entry.split()
-			ret.addInterval(split[0], split[1], split[2])
+			ret.addInterval(split[0], int(split[1]), int(split[2]))
 	return (ret)
 
 def parseFile(file_name):
@@ -35,9 +35,10 @@ def main(argc, argv):
 	search = parseFile(argv[2])
 	for chrom in base.intervals:
 		baseTree = IntervalTree(base.intervals[chrom])
+		#print("Chromosome:{}".format(chrom))
 		if chrom in search.intervals:
 			for interval in search.intervals[chrom]:
 				overlap = baseTree.querey(interval)
-				print("Chromosome:{}\nQuerey:{}\nOverlaps {}".format(chrom, interval, overlap))
+		#		print("Querey:{}\nOverlaps {}".format(interval, overlap))
 
 main(len(sys.argv), sys.argv)
