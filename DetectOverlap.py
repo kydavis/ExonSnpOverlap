@@ -1,15 +1,21 @@
 from lib.IntervalTree import IntervalTree
 import sys
 
+def addInterval(dic, key, s1, s2):
+	interval = [int(s1), int(s2)]
+	start = min(interval)
+	end = max(interval)
+	if key in dic:
+		dic[key].append((start, end))
+	else:
+		dic[key] = [(start,end)]
+
 def parseGFF(file_name):
 	ret = {}
 	with open(file_name, "rb") as gff:
 		for entry in gff:
 			split = entry.split()
-			if split[0] in ret:
-				ret[split[0]].append(tuple((int(split[3]), int(split[4]))))
-			else:
-				ret[split[0]] = [tuple((int(split[3]), int(split[4])))]
+			addInterval(ret, split[0], split[3], split[4])
 	return (ret)
 
 def parseBED(file_name):
@@ -17,10 +23,7 @@ def parseBED(file_name):
 	with open(file_name, "rb") as bed:
 		for entry in bed:
 			split = entry.split()
-			if split[0] in ret:
-				ret[split[0]].append(tuple((int(split[1]), int(split[2]))))
-			else:
-				ret[split[0]] = [tuple((int(split[1]), int(split[2])))]
+			addInterval(ret, split[0], split[1], split[2])
 	return (ret)
 
 def parseFile(file_name):
