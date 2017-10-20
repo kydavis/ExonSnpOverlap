@@ -1,21 +1,26 @@
 from lib.IntervalTree import IntervalTree
-from lib.GeneData import GenomicIntervals
 import sys
 
 def parseGFF(file_name):
-	ret = GenomicIntervals()
+	ret = {}
 	with open(file_name, "rb") as gff:
 		for entry in gff:
 			split = entry.split()
-			ret.addInterval(split[0], int(split[3]), int(split[4]))
+			if split[0] in ret:
+				ret[split[0]].append(tuple((int(split[3]), int(split[4]))))
+			else:
+				ret[split[0]] = [tuple((int(split[3]), int(split[4])))]
 	return (ret)
 
 def parseBED(file_name):
-	ret = GenomicIntervals()
+	ret = {}
 	with open(file_name, "rb") as bed:
 		for entry in bed:
 			split = entry.split()
-			ret.addInterval(split[0], int(split[1]), int(split[2]))
+			if split[0] in ret:
+				ret[split[0]].append(tuple((int(split[1]), int(split[2]))))
+			else:
+				ret[split[0]] = [tuple((int(split[1]), int(split[2])))]
 	return (ret)
 
 def parseFile(file_name):
@@ -33,12 +38,14 @@ def main(argc, argv):
 		return (-1)
 	base = parseFile(argv[1])
 	search = parseFile(argv[2])
-	for chrom in base.intervals:
-		baseTree = IntervalTree(base.intervals[chrom])
-		#print("Chromosome:{}".format(chrom))
-		if chrom in search.intervals:
-			for interval in search.intervals[chrom]:
+	for chrom in base:
+		base[chrom].sort()
+		baseTree = IntervalTree(base[chrom])
+		print("Chromosome:{}".format(chrom))
+		if chrom in search:
+			search[chrom].sort(key=lambda x: (x[0], x[1]))
+			for interval in search[chrom]:
 				overlap = baseTree.querey(interval)
-		#		print("Querey:{}\nOverlaps {}".format(interval, overlap))
+				print("\tQuerey:{}\n\tOverlaps {}\n".format(interval, overlap))
 
 main(len(sys.argv), sys.argv)
