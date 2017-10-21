@@ -46,7 +46,7 @@ def main(argc, argv):
 		baseTree = IntervalTree(base[chrom])
 		print("Chromosome:{}".format(chrom))
 		if chrom in search:
-			search[chrom].sort(key=lambda x: (x[0], x[1]))
+			search[chrom].sort()
 			for interval in search[chrom]:
 				overlap = baseTree.querey(interval)
 				print("\tQuerey:{}\n\tOverlaps {}\n".format(interval, overlap))
